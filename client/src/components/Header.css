@@ -1,0 +1,304 @@
+body {
+    background-color:#F1F3F6;
+    font-family: Roboto,Arial,sans-serif;
+}
+.header {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2874F0;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 124px;
+    padding-right: 124px;
+    height: 56px;
+    position: sticky;
+    z-index: 100;
+    top: 0;
+}
+.header__logo {
+    padding-left: 62px;
+    margin-top: -2px;
+}
+
+.header__logoImage {
+    width: 75px;
+}
+
+.header__logoText {
+    font-size: 11px;
+    font-style: italic;
+    font-weight: 200;
+    font-family: 'Roboto';
+    text-decoration: none;
+    color: white;
+}
+
+.header__logoText > span{
+    color: #ffe500;
+    margin-right: 2px;
+    font-weight: 500;
+}
+.header__logoText > span > img {
+    margin-left: 2px;
+    margin-bottom: 2px;
+    width: 10px;
+}
+
+.header__search {
+    display:flex;
+    flex: 1;
+    align-items: center;
+    border-radius: 2px;
+    width: calc(100% - 540px);
+    min-width: 304px;
+    margin: 0 auto 0 12px;
+    
+}
+
+.header__searchInput {
+    padding: 0px 16px;
+    border-radius: 2px 0px 0px 2px;
+    border: 0px;
+    outline: none 0px;
+    font-size: 14px;
+    height: 36px;
+    width: 525px;
+    font-family: 'Roboto';
+}
+
+.header__searchIcon {
+    color: #2874F0;
+    background-color: #ffffff;
+    border: none;
+    height: 36px;
+}
+
+.header__userLogin {
+    display: inline-block;
+    position: relative;
+    font-family: 'Roboto';
+    font-weight: 500;
+}
+.header__userLoginBtn {
+    background-color: #fff;
+    border-radius: 2px;
+    height: 32px;
+    padding: 3px 40px;
+    border: 1px solid #dbdbdb;
+    margin: 0px 20px;
+    color: #2874f0;    
+    font-size: 15px;
+    font-family: 'Roboto';
+    font-weight: 500;
+    cursor: pointer;
+}
+.modal-dialog {
+    max-width: 750px;
+}
+.modal-content {
+    margin-top: 35px;  
+    background: transparent;
+    border: none;  
+}
+.loginForm {
+    position: relative;
+    width: 710px;
+    background: transparent;
+}
+.login__text1 {
+    position: absolute;
+    color: white;
+    font-size: 28px;
+    font-weight: 500;
+    top: 38px;
+    left: 68px;
+}
+.login__text2 {
+    position: absolute;
+    font-size: 18px;
+    top: 95px;
+    left: 67px;
+    line-height: 150%;
+    color: #dbdbdb;
+    width: 200px;
+}
+
+.loginForm__body {
+    display: flex;
+    margin-left: 35px;
+    background: white;
+    border-radius: 5px;
+}
+
+.loginForm__bodyImage {
+    height: 528px;
+    width: 100%;
+    background-color: #2874f0;
+    border-radius: 4px 0px 0px 4px;
+}
+
+.loginForm__bodyImage img {
+    position: absolute;
+    top: 331px;
+    left: 65px;
+}
+
+.loginForm__content {
+    padding: 60px 35px 20px 35px;
+}
+
+.loginForm_submit {
+    background: #fb641b;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 20%);
+    border: none;
+    color: #fff;
+    width: 333px;
+    height: 48px;
+    font-weight: 500;
+    border-radius: 3px;
+}
+
+.loginForm__input {
+    position: relative;
+    margin-bottom: 34px;
+    
+}
+
+.loginForm__input input {
+    width: 333px;
+    border: none;
+    border-bottom: 1px solid #999;
+    outline: none;
+    transition: 0.2s;
+}
+
+.loginForm__input label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #999;
+    
+    transition: 0.2s;
+    pointer-events: none;
+}
+
+.loginForm__input input:focus ~ label, 
+.loginForm__input input:valid ~ label {
+  top: -18px;
+  left: 0;
+  font-size: 14px;
+  font-weight: 500;
+} 
+
+.loginForm__input input:focus, 
+.loginForm__input input:valid{
+    
+    border-bottom: 2px solid rgb(65, 138, 255);
+} 
+
+.loginForm_close {
+    position: absolute;
+    right: -40px;
+    top: -5px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    line-height: 1;
+    vertical-align: top;
+}
+.loginForm_close > span {
+    font-size: 35px;
+}
+.header__moreOptions {
+    display: inline-block;
+    position: relative;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    flex: 0;
+    height: 32px;
+    padding: 5px 0px;
+    border: none;
+    margin: 0px 20px;
+    font-family: 'Roboto';
+}
+
+.header__moreOptions > span {
+    position: absolute;
+    right: 1;
+    padding: 3px 2px;
+    font-size: 16px;
+}
+
+.header__moreOptions:hover .header__dropdown {
+    display: block;
+}
+.header__userLogin:hover .header__dropdown {
+    display: block;
+}
+
+.header__dropdown {
+    display: none;
+    z-index: 1;
+    color: black;
+    position: absolute;
+    top: 32px;
+    left: -90px;
+    width: 240px;
+    border-radius: 3px;
+    margin: -5px;
+}
+.header__dropdownItem {
+    display: flex;
+    background-color: white;
+    padding: 15px 8px;
+    border-top: 1px solid rgb(0 0 0 / 13%);
+    font-weight: 400;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.header__dropdownItem > a {
+    padding-left:60px;
+    color: #2874f0;
+    font-weight:500;
+    text-decoration: none;
+}
+.header__dropdownItem > a:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.header__dropdownItem > span {
+    color: #2874F0;
+    font-size: 16px;
+    padding-right: 5px;
+    padding-top: 3px;
+}
+
+.header__cart {
+    font-weight: 500;
+    
+    cursor: pointer;
+    flex: 0;
+    height: 32px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    border: none;
+    margin: 0px 20px;
+    font-family: 'Roboto';
+}
+.header__cart > a {
+    font-size: 15px;
+    display:flex;
+    color: white; 
+    text-decoration: none;
+}
+.header__cartIcon {font-size: 20px; }
+/* Header Ends */
