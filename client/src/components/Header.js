@@ -16,7 +16,7 @@ function Header() {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [address, setAddress] = useState('')
-    const { user } = useSelector((state) => ({ ...state }));
+    const { user, showLoginForm } = useSelector((state) => ({ ...state }));
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
@@ -26,8 +26,17 @@ function Header() {
         if (user && user.role == "Admin") navigate("/admin/dashboard")
     }, [user])
 
+    useEffect(() => {
+        if(showLoginForm) {setFormType({ userType: 'User', userAction: 'Login'})}
+    },[showLoginForm])
 
-
+    const handleFormClose = () => {
+        setFormType({ userType: "", userAction: "" })
+        dispatch({
+            type: "SHOW_LOGIN_FORM",
+            payload: false,
+        })
+    }
 
     const signIn = async (e) => {
         e.preventDefault()
@@ -183,21 +192,21 @@ function Header() {
                             </div>
                         }
                         <button type="button"
-                            onClick={() => setFormType({ userType: "", userAction: "" })} className="loginForm_close">
+                            onClick={handleFormClose} className="loginForm_close">
                             <span className="material-icons">close</span>
                         </button>
                     </div>
                 </div>
             </Modal>
 
-            <a className="header__logo" href="/">
+            <Link className="header__logo" to="/" style={{ textDecoration: 'none' }}>
                 <img className="header__logoImage"
                     src="https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/flipkart-plus_8d85f4.png" alt="" />
                 <div className="header__logoText">
                     Explore <span>Plus<img
                         src="https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/plus_aef861.png" alt="" /></span>
                 </div>
-            </a>
+            </Link>
 
             <form className="header__search">
                 <input className="header__searchInput" type="text" placeholder="Search for products, brands and more" />
@@ -276,9 +285,9 @@ function Header() {
                 </div>
             </div>
             <div className="header__cart">
-                <a href="{{ route('display_cart') }}">
+                <Link to="/cart">
                     <span className="header__cartIcon material-icons">shopping_cart</span>Cart
-                </a>
+                </Link>
             </div>
         </div>
     );

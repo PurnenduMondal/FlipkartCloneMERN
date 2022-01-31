@@ -18,19 +18,19 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
     selling_price: {
-      type: String,
+      type: Number,
       required: true,
       trim: true,
       maxlength: 32,
     },
     actual_price: {
-      type: String,
+      type: Number,
       required: true,
       trim: true,
       maxlength: 32,
     },
     discount: {
-      type: String,
+      type: Number,
       required: true,
       trim: true,
       maxlength: 32,

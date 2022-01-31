@@ -21,15 +21,17 @@ function ProductDetails() {
 
   const handleAddToCart = () => {
 
-    let cartState = JSON.parse(cart)
-    if (cartState[product._id] == undefined) {
+    let cartItems = JSON.parse(cart)
+    if (cartItems.find(item => item._id === product._id) === undefined) {
       
       product['quantity'] = 1
-      cartState[product._id] = product
+      cartItems.push(product)
+
+      console.log(cartItems)
 
       dispatch({
         type: "ADD_TO_CART",
-        payload: JSON.stringify(cartState),
+        payload: JSON.stringify(cartItems),
       })
     }
 
@@ -42,9 +44,9 @@ function ProductDetails() {
       <div className="productdetails">
         <div className="product__imageColumn">
 
-          {product.images.map(image =>
-            <div className="product__smallImage">
-              <img src={image.url} alt="" />
+          {product.images.map((image, i) =>
+            <div className="product__smallImage"  key={i}>
+              <img src={image.url}  alt="" />
             </div>
           )
           }
@@ -66,7 +68,7 @@ function ProductDetails() {
               </span>
               <span>ADD TO CART</span>
             </a>
-            <a className="product__buyButton" >
+            <a className="product__buyButton" onClick={handleAddToCart} >
               <span className="material-icons">
                 flash_on
               </span>

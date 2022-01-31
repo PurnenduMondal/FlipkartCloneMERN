@@ -47,6 +47,9 @@
   border-bottom: 1px solid rgb(218, 218, 218);
   padding: 24px;
 }
+.cart__item > div {
+  display: flex;
+}
 .cart__itemImage {
   height: 112px; 
   width: 112px;
@@ -102,11 +105,10 @@
   font-weight: 500;
   cursor: pointer;
   outline: 0;
+  padding-top: 10px; 
+  display: flex;
 }
-.item__remove a {
-  text-decoration: none;
-  color: black;
-}
+
 .cartItem__addRemoveBtn {
   width:28px;
   height:28px;
@@ -195,6 +197,8 @@
   align-items: center;
   padding: 50px;
   width: 100%;
+  background-color: white; 
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px; background-color: white;
 }
 
 .cart__empty > img{
