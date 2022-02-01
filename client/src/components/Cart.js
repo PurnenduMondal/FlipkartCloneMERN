@@ -2,18 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import "./Cart.css"
+import { Elements } from "@stripe/react-stripe-js";
 import Header from './Header';
-import {auth} from '../firebase'
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from './CheckoutForm';
 
 function Cart() {
 
-    const { cart, user, showLoginForm} = useSelector(state => ({ ...state }))
-
+    const { cart, user, showLoginForm } = useSelector(state => ({ ...state }))
+    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
     const [items, setItems] = useState([])
     const dispatch = useDispatch()
     const [totalDiscountPrice, setTotalDiscountPrice] = useState(0)
     const [totalActualPrice, setTotalActualPrice] = useState(0)
     const [totalSellingPrice, setTotalSellingPrice] = useState(0)
+    const [cardNumber, setCardNumber] = useState(null)
+    const [expMonth, setExpMonth] = useState(null)
+    const [expYear, setExpYear] = useState(null)
+    const [CVV, setCVV] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+    const [clientSecret, setClientSecret] = useState(null)
+    const [error, setError] = useState(null)
+
 
     useEffect(() => {
         setItems(JSON.parse(cart))
@@ -25,17 +35,17 @@ function Cart() {
         setTotalSellingPrice(items.reduce((a, b) => (a + b.selling_price * b.quantity), 0))
     }, [items])
 
+
+
     const handlePlaceOrder = () => {
-        if(user == null){
-            dispatch({
-                type: 'SHOW_LOGIN_FORM',
-                payload: true,
-            })
-        }
+        dispatch({
+            type: 'SHOW_LOGIN_FORM',
+            payload: !showLoginForm,
+        })
     }
-    
+
     const handleRemoveItem = (itemId) => {
-        
+
         let remainingItems = items.filter((item) => (item._id !== itemId))
 
         dispatch({
@@ -47,12 +57,13 @@ function Cart() {
     const handleQuantity = (itemIndex, quantity) => {
         let cartItems = items
         cartItems[itemIndex].quantity = quantity
-        
+
         dispatch({
             type: 'REMOVE_CART_ITEM',
             payload: JSON.stringify(cartItems),
         })
     }
+
 
     return (
         <div>
@@ -96,12 +107,12 @@ function Cart() {
                                         </div>
                                         <div className="item__remove" >
 
-                                            <button className="cartItem__addRemoveBtn" onClick={handleQuantity.bind(this, i, item.quantity-1)}> - </button>
+                                            <button className="cartItem__addRemoveBtn" onClick={handleQuantity.bind(this, i, item.quantity - 1)}> - </button>
                                             <div className="item__quantity">
                                                 <input type="text" id={item._id} name="quantity"
                                                     value={item.quantity} disabled />
                                             </div>
-                                            <button className="cartItem__addRemoveBtn" onClick={handleQuantity.bind(this, i, item.quantity+1)}> + </button>
+                                            <button className="cartItem__addRemoveBtn" onClick={handleQuantity.bind(this, i, item.quantity + 1)}> + </button>
 
                                             <div style={{ fontWeight: '500', marginLeft: '24px' }} onClick={handleRemoveItem.bind(this, item._id)} >
                                                 REMOVE
@@ -109,11 +120,11 @@ function Cart() {
                                         </div>
                                     </div>
                                 )}
-                                
-                                <div className="cart__footer" style={user === null ? { display : 'flex' } : { display : 'none' }}>
-                                    <button onClick={handlePlaceOrder}>PLACE ORDER</button>
+
+                                <div className="cart__footer" style={user === null ? { display: 'flex' } : { display: 'none' }}>
+                                    <button id="placeOrder" onClick={handlePlaceOrder}>PLACE ORDER</button>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div className="cart__priceSection">
@@ -123,12 +134,12 @@ function Cart() {
                             <div className="allPrices">
                                 <div className="price__row">
                                     <div className="text">Price ({items.length} items)</div>
-                                    <div className="cart__totalActualPrice ">&#8377;<span>{ totalActualPrice }</span></div>
+                                    <div className="cart__totalActualPrice ">&#8377;<span>{totalActualPrice}</span></div>
                                 </div>
                                 <div className="price__row">
                                     <div className="text">Discount</div>
                                     <div className="cart__totalDiscount" style={{ color: '#3ca842' }} className="amount">
-                                        -&#8377;<span>{ totalDiscountPrice }</span></div>
+                                        -&#8377;<span>{totalDiscountPrice}</span></div>
                                 </div>
                                 <div className="price__row">
                                     <div className="text">Delivery Charges</div>
@@ -139,50 +150,13 @@ function Cart() {
                                     <div className="cart__totalSellingPrice ">&#8377;<span>{totalSellingPrice}</span></div>
                                 </div>
                             </div>
-                            { user !== null ? 
-                            <form className="cart__payment" method='post' action="{{ route('make-payment') }}" data-cc-on-file="false"
-                                data-stripe-publishable-key="{{ env('STRIPE_KEY') }}">
-
-                                {/* @if (Session::has('success'))
-                                <div className="alert alert-primary text-center">
-                                    <p>{{ Session::get('success') }}</p>
-                                </div>
-                                @endif */}
-                                <div style={{ display: 'flex' }}>
-                                    <div className="cart__cardPayment" style={{ fontSize: '14px' }}>
-                                        Credit / Debit / ATM Card
-                                        <div className="cart__cardInput" style={{ width: '319px', marginTop: '8px' }}>
-                                            <input type="number" className="card-number" required />
-                                            <label htmlFor="">Enter Card Number</label>
-                                        </div>
-                                        <div style={{ display: 'flex' }}>
-                                            <div className="cart__cardDate" style={{ fontSize: '14px' }}>
-                                                Valid Thru
-                                                <select className="expiration_month" style={{ border: 'none', marginLeft: '5px' }}>
-                                                    <option>MM</option>
-                                                    {[...Array(12)].map((e, i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)
-                                                    }
-                                                </select>
-                                                <select className="expiration_year" id="" style={{ border: 'none' }}>
-                                                    <option>YY</option>
-                                                    {[...Array(20)].map((e, i) => <option key={i + 20} value={i + 20}>{i + 20}</option>)
-                                                    }
-                                                </select>
-                                            </div>
-
-                                            <div className="cart__cardInput" style={{ width: '128px' }}>
-                                                <input className="cvv" type="number" required />
-                                                <label htmlFor="">CVV</label>
-                                            </div>
-                                        </div>
-                                        <div className="cart__payBtn">
-                                            {/* <input type="hidden" name='amount' value="{{$total_selling_price }}"/> */}
-                                            <input type="hidden" name="cartproducts" value='null' />
-                                            <button type="submit">PAY &#8377;{totalSellingPrice}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form> : ''
+                            {user !== null ?
+                                <Elements stripe={stripePromise}>
+                                    {error !== null ? <div className="alert alert-primary text-center">
+                                        <p>{error}</p>
+                                    </div> : ''}
+                                    <CheckoutForm totalSellingPrice={totalSellingPrice} />
+                                </Elements> : ''
                             }
                         </div>
                     </div>)
@@ -196,6 +170,42 @@ function Cart() {
                         </div>
                     </div>
                 }
+
+
+                {/* <div style={{ display: 'flex' }}>
+                                        <div className="cart__cardPayment" style={{ fontSize: '14px' }}>
+                                            Credit / Debit / ATM Card
+                                            <div className="cart__cardInput" style={{ width: '319px', marginTop: '8px' }}>
+                                                <input type="number" className="card-number" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} required />
+                                                <label htmlFor="">Enter Card Number</label>
+                                            </div>
+                                            <div style={{ display: 'flex' }}>
+                                                <div className="cart__cardDate" style={{ fontSize: '14px' }}>
+                                                    Valid Thru
+                                                    <select className="expiration_month" style={{ border: 'none', marginLeft: '5px' }} value={expMonth} onChange={(e) => setExpMonth(e.target.value)} >
+                                                        <option>MM</option>
+                                                        {[...Array(12)].map((e, i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)
+                                                        }
+                                                    </select>
+                                                    <select className="expiration_year" id="" style={{ border: 'none' }} value={expYear} onChange={(e) => setExpYear(e.target.value)} >
+                                                        <option>YY</option>
+                                                        {[...Array(20)].map((e, i) => <option key={i + 20} value={i + 20}>{i + 20}</option>)
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <div className="cart__cardInput" style={{ width: '128px' }}>
+                                                    <input className="cvv" type="number" value={CVV} onChange={(e) => setCVV(e.target.value)} required />
+                                                    <label htmlFor="">CVV</label>
+                                                </div>
+
+                                            </div>
+                                            <div className="cart__payBtn">
+                                                <button type="submit">PAY &#8377;{totalSellingPrice}</button>
+                                            </div>
+                                            <p className="mt-2">Try it out using the test card number<br /> 4242 4242 4242 4242, a random three-digit<br /> CVC number and any expiration date in the future.</p>
+                                        </div>
+                                    </div>     */}
             </div>
         </div>)
 }

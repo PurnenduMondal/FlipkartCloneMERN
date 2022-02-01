@@ -20,7 +20,7 @@ function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
-    
+
 
     useEffect(() => {
         if (user && user.role == "Admin") navigate("/admin/dashboard")
@@ -29,6 +29,7 @@ function Header() {
     useEffect(() => {
         if(showLoginForm) {setFormType({ userType: 'User', userAction: 'Login'})}
     },[showLoginForm])
+
 
     const handleFormClose = () => {
         setFormType({ userType: "", userAction: "" })
