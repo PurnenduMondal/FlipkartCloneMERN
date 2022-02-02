@@ -1,0 +1,40 @@
+.editProduct {
+  width: 100%;
+}
+.editProduct__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 15px 130px;
+  background: #ffffff;
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.editProduct__form > input {
+  width: 100%;
+}
+
+.categoryDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.categoryDiv > div > input {
+  width: 250px;
+}
+
+.editProduct__images {
+  background-color: rgb(231 231 231);
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  padding: 23px 22px;
+  width: 100%;    
+  margin-top: 8px;
+}
+.categoryDiv > div > input, .editProduct__form > div > input {
+  background-color: rgb(235, 235, 235);
+} 

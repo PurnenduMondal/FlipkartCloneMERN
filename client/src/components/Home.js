@@ -11,7 +11,7 @@ function Home() {
 
     useEffect(() => {
         getAllProducts({}).then(res => setProducts(res.data))
-    }, [products])
+    }, [])
 
     let sliderImages = [
         "https://rukminim1.flixcart.com/flap/1680/280/image/b47ca8ef99c54b4a.jpeg?q=50",
@@ -108,7 +108,7 @@ function Home() {
                     <h4>Deals of the Day</h4>
                     <div className="productSlider">
                         {
-                            products.map((product) => (<Product product={product} />))
+                            products.map((product, i) => (<Product product={product} key={i}/>))
                         }
                     </div>
                     <a className="subcategory__prevButton" >

@@ -12,6 +12,7 @@ const ProductDetails = lazy(() => import("./components/ProductDetails.js"))
 const EditProduct = lazy(() => import("./components/EditProduct.js"))
 const Orders = lazy(() => import("./components/Orders.js"))
 const Cart = lazy(() => import("./components/Cart.js"))
+const AdminOrders = lazy(() => import("./components/AdminOrders.js"))
 
 
 const renderLoader = () => (
@@ -51,6 +52,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/admin/dashboard" element={<AdminDashBoard />} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/editproduct/:slug" element={<EditProduct />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/orders" element={<Orders />} />

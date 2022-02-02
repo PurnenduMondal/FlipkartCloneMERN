@@ -22,3 +22,14 @@ exports.listAll = async (req, res) => {
   res.json(products);
 };
 
+exports.updateProduct = async (req, res) => {
+  let _id = req.body._id
+  const { name, category, subcategory, selling_price, actual_price, discount } = req.body
+
+  let product = await Product.findOneAndUpdate(
+    { _id }, 
+    {name, category, subcategory, selling_price, actual_price, discount}, 
+    {new: true})
+
+  res.json(product)
+}

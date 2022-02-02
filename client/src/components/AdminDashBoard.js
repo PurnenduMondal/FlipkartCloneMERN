@@ -3,36 +3,29 @@ import './AdminDashboard.css'
 import { useSelector } from "react-redux"
 import axios from 'axios'
 import { auth } from '../firebase'
-import { useNavigate } from 'react-router-dom';
 import { createProduct, getAllProducts } from '../functions/product'
+import { Link } from 'react-router-dom'
 const AdminSidebar = lazy(() => import("./AdminSidebar.js"))
 
 
 export default function AdminDashboard() {
+
     const initialProductStates = { name: "", category: "", subcategory: "", selling_price: "", actual_price: "", discount: "", images: [] }
     const { user } = useSelector((state) => ({ ...state }));
     const [products, setProducts] = useState([])
     const [product, setProduct] = useState(initialProductStates)
     const [isLoading, setIsLoading] = useState(false)
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (!user) navigate("/")
-    }, [user])
 
     useEffect(() =>{
         getAllProducts({}).then(res => setProducts(res.data))
-    },[products])
+    },[])
     
     
     const handleInputChange = (e) => {
-        setProduct({
-            ...product,
-            [e.target.name]: e.target.value
-        })
+        setProduct({...product, [e.target.name]: e.target.value})
 
         if (e.target.files && e.target.files[0]) {
-            console.log(e.target.files[0])
+
             var productImages = []
             let files = e.target.files
             for (let i = 0; i < files.length; i++) {
@@ -64,6 +57,7 @@ export default function AdminDashboard() {
         .then((res) => {
             createProduct({ ...product, images: res.data }, idToken)
             setProduct(initialProductStates)
+            getAllProducts({}).then(res => setProducts(res.data))
             setIsLoading(false)
         })
         .catch(err => console.log(err))
@@ -72,7 +66,7 @@ export default function AdminDashboard() {
 
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
-            <AdminSidebar />
+            <AdminSidebar panelName={'Products'}/>
             <div className="verticalLine" style={{ borderLeft: '1px solid #b1b1b1' }}></div>
             <div className="py-3" style={{ width: '100%', paddingLeft: '1rem' }}>
                 <table className="table">
@@ -87,19 +81,19 @@ export default function AdminDashboard() {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product) =>
-                            <tr>
+                        {products.map((product, i) =>
+                            <tr key={i}>
                                 <td className="text-center">{product.name}</td>
                                 <td className="text-center">{product.selling_price}</td>
                                 <td className="text-center">{product.actual_price}</td>
                                 <td className="text-center">{product.discount}%</td>
                                 <td className="text-center">
                                     <form method="post">
-                                        <a style={{ height: '23px' }} name="profileBtn" href="" type="submit" className="btn btn-sm">
+                                        <Link to={"/admin/editproduct/"+product.slug} style={{ height: '23px' }} name="profileBtn" href="" type="submit" className="btn btn-sm">
                                             <span className="material-icons">
                                                 edit
                                             </span>
-                                        </a>
+                                        </Link>
                                     </form>
                                 </td>
                                 <td className="text-center">

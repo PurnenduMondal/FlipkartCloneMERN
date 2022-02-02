@@ -2,12 +2,18 @@ import React, { useEffect } from 'react'
 import './AdminSidebar.css'
 import { auth } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
 
-export default function AdminSidebar() {
+export default function AdminSidebar({panelName}) {
 
     const { user } = useSelector((state) => ({ ...state }));
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     //useEffect(() => console.log(user.user.first_name), [user])
+    useEffect(() => {
+        if (!user) navigate("/")
+    }, [user])
     
     const logout = () => {
         auth.signOut();
@@ -27,7 +33,7 @@ export default function AdminSidebar() {
                     </a>
                     <hr />
                     <div className="dropdown">
-                        <a href="#" className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
+                        <a  className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
                             id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://avatars.githubusercontent.com/u/38310111?v=4" alt="" width="32" height="32"
                                 className="rounded-circle me-2" />
@@ -48,14 +54,14 @@ export default function AdminSidebar() {
                     <hr />
                     <ul className="nav nav-pills flex-column mb-auto accordion">
                         <li>
-                            <a href="" className="nav-link active">
+                            <Link to="/admin/dashboard" className={panelName=="Products" ? "nav-link active" : "nav-link link-dark"}>
                                 Products
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="" className="nav-link link-dark">
+                            <Link to="/admin/orders" className={panelName=="Orders" ? "nav-link active" : "nav-link link-dark"}>
                                 Orders
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>

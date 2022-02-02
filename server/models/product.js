@@ -20,20 +20,14 @@ const productSchema = new mongoose.Schema(
     selling_price: {
       type: Number,
       required: true,
-      trim: true,
-      maxlength: 32,
     },
     actual_price: {
       type: Number,
       required: true,
-      trim: true,
-      maxlength: 32,
     },
     discount: {
       type: Number,
       required: true,
-      trim: true,
-      maxlength: 32,
     },
     images: {
       type: Array,

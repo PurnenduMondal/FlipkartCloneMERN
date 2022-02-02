@@ -130,9 +130,9 @@ function Header() {
                                             "Login"
                                         }
                                     </button>
-                                    <a onClick={() => setFormType({ userType: formType.userType, userAction: "Register" })} className="login_link" style={{ textDecoration: 'none', fontWeight: '500', cursor: 'pointer' }}>
+                                    <p onClick={() => setFormType({ userType: formType.userType, userAction: "Register" })} className="login_link" style={{color:"#2874f0",  textDecoration: 'none', fontWeight: '500', cursor: 'pointer' }}>
                                         Create an account
-                                    </a>
+                                    </p>
                                 </form>
                                 <div className="login__text1">{formType.userType} Login</div>
                                 <div className="login__text2">Get access to your Orders, Wishlist and Recommendations</div>
@@ -182,11 +182,11 @@ function Header() {
                                         }
                                     </button>
 
-                                    <a className="login_link" style={{ textDecoration: 'none', fontWeight: '500', cursor: 'pointer' }}
+                                    <p className="login_link" style={{ color:"#2874f0", textDecoration: 'none', fontWeight: '500', cursor: 'pointer' }}
                                         onClick={() => setFormType({ userType: formType.userType, userAction: "Login" })}
                                     >
                                         Login to your account
-                                    </a>
+                                    </p>
                                 </form>
                                 <div className="login__text1">{formType.userType} Sign Up</div>
                                 <div className="login__text2">Sign up with your email address to get started</div>
@@ -235,12 +235,12 @@ function Header() {
                                 New customer?<a className='login_link' onClick={() => setFormType({ userType: "User", userAction: "Register" })} >Sign Up</a>
                             </div> : ''
                         }
-                        <Link className="header__dropdownItem" to="/profile">
+                        <Link className="header__dropdownItem" to="/profile" style={{color: "black"}}>
                             <span className="material-icons">account_circle</span> My Profile
                         </Link>
-                        <div className="header__dropdownItem">
-                            <span className="material-icons">drive_folder_upload</span> Orders
-                        </div>
+                        <Link className="header__dropdownItem" to="/orders" style={{color: "black"}}>
+                            <span className="material-icons">drive_folder_upload</span>Orders
+                        </Link>
                         <div className="header__dropdownItem">
                             <span className="material-icons">favorite</span> Wishlists
                         </div>

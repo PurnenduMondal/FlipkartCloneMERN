@@ -9,3 +9,6 @@ export const createProduct = async (product, authtoken) =>
 
 export const getAllProducts = async (slug) =>
   await axios.post(`${process.env.REACT_APP_API}/products`, slug);
+
+export const updateProduct = async (product) =>
+  await axios.post(`${process.env.REACT_APP_API}/updateProduct`, product);

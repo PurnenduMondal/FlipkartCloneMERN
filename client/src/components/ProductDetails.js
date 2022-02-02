@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getAllProducts } from '../functions/product';
 import Header from './Header';
 import './ProductDetails.css'
@@ -17,13 +17,15 @@ function ProductDetails() {
 
   useEffect(() => {
     getAllProducts({ slug: params.slug }).then(res => setProduct(res.data[0]))
-  })
+  }, [])
+
+
 
   const handleAddToCart = () => {
 
     let cartItems = JSON.parse(cart)
     if (cartItems.find(item => item._id === product._id) === undefined) {
-      
+
       product['quantity'] = 1
       cartItems.push(product)
 
@@ -45,11 +47,10 @@ function ProductDetails() {
         <div className="product__imageColumn">
 
           {product.images.map((image, i) =>
-            <div className="product__smallImage"  key={i}>
-              <img src={image.url}  alt="" />
+            <div className="product__smallImage" key={i}>
+              <img src={image.url} alt="" />
             </div>
-          )
-          }
+          )}
 
         </div>
         <div>

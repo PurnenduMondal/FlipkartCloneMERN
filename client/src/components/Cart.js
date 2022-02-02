@@ -79,7 +79,7 @@ function Cart() {
                                     <div className="cart__address">
                                         <img src="https://res.cloudinary.com/dj1rgwak8/image/upload/v1642616021/Pin.svg" alt="" />
                                         <span>Deliver to</span>
-                                        <div>Address</div>
+                                        <div>{user !==null ? user.address : 'address'}</div>
                                     </div>
                                 </div>
 
@@ -155,7 +155,7 @@ function Cart() {
                                     {error !== null ? <div className="alert alert-primary text-center">
                                         <p>{error}</p>
                                     </div> : ''}
-                                    <CheckoutForm totalSellingPrice={totalSellingPrice} />
+                                    <CheckoutForm totalSellingPrice={totalSellingPrice} cartItems={items} userId={user._id}/>
                                 </Elements> : ''
                             }
                         </div>
