@@ -83,6 +83,7 @@ function Header() {
                     })
                 })
             setIsLoading(false)
+            setFormType({ userType: "", userAction: "" })
         } catch (error) {
             console.log(error);
         }
