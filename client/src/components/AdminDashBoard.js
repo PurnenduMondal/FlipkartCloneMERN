@@ -3,8 +3,9 @@ import './AdminDashboard.css'
 import { useSelector } from "react-redux"
 import axios from 'axios'
 import { auth } from '../firebase'
-import { createProduct, getAllProducts } from '../functions/product'
+import { createProduct, deleteProductImage, getAllProducts } from '../functions/product'
 import { Link } from 'react-router-dom'
+import { deleteProduct } from '../functions/product'
 const AdminSidebar = lazy(() => import("./AdminSidebar.js"))
 
 
@@ -15,14 +16,19 @@ export default function AdminDashboard() {
     const [products, setProducts] = useState([])
     const [product, setProduct] = useState(initialProductStates)
     const [isLoading, setIsLoading] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
 
-    useEffect(() =>{
+    useEffect(() => {
         getAllProducts({}).then(res => setProducts(res.data))
-    },[])
-    
-    
+    }, [])
+
+    useEffect(() => {
+        let discount = parseInt((product.actual_price - product.selling_price) * (100 / product.actual_price))
+        setProduct({ ...product, discount: discount })
+    }, [product.selling_price, product.actual_price])
+
     const handleInputChange = (e) => {
-        setProduct({...product, [e.target.name]: e.target.value})
+        setProduct({ ...product, [e.target.name]: e.target.value })
 
         if (e.target.files && e.target.files[0]) {
 
@@ -41,6 +47,20 @@ export default function AdminDashboard() {
         }
     }
 
+    const handleDeleteProduct = async (productId, images) => {
+        setIsDeleting(true)
+        for await (const image of images) {
+            deleteProductImage({ public_id: image.public_id }).then(res => console.log(res))
+        }
+
+        deleteProduct({ productId: productId }).then(res => {
+            getAllProducts({}).then(res => {
+                setProducts(res.data)
+                setIsDeleting(false)
+            })
+        })
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
@@ -52,21 +72,22 @@ export default function AdminDashboard() {
                 headers: {
                     authtoken: idToken,
                 },
-            }
-        )
-        .then((res) => {
-            createProduct({ ...product, images: res.data }, idToken)
-            setProduct(initialProductStates)
-            getAllProducts({}).then(res => setProducts(res.data))
-            setIsLoading(false)
-        })
-        .catch(err => console.log(err))
+            })
+            .then((res) => {
+                createProduct({ ...product, images: res.data }, idToken).then(res => {
+                    setProduct(initialProductStates)
+                    getAllProducts({}).then(res => setProducts(res.data))
+                    setIsLoading(false)
+                })
+
+            })
+            .catch(err => console.log(err))
 
     }
 
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
-            <AdminSidebar panelName={'Products'}/>
+            <AdminSidebar panelName={'Products'} />
             <div className="verticalLine" style={{ borderLeft: '1px solid #b1b1b1' }}></div>
             <div className="py-3" style={{ width: '100%', paddingLeft: '1rem' }}>
                 <table className="table">
@@ -89,7 +110,7 @@ export default function AdminDashboard() {
                                 <td className="text-center">{product.discount}%</td>
                                 <td className="text-center">
                                     <form method="post">
-                                        <Link to={"/admin/editproduct/"+product.slug} style={{ height: '23px' }} name="profileBtn" href="" type="submit" className="btn btn-sm">
+                                        <Link to={"/admin/editproduct/" + product.slug} style={{ height: '23px' }} name="profileBtn" href="" type="submit" className="btn btn-sm">
                                             <span className="material-icons">
                                                 edit
                                             </span>
@@ -97,11 +118,16 @@ export default function AdminDashboard() {
                                     </form>
                                 </td>
                                 <td className="text-center">
-                                    <a name="deleteItem" className="btn btn-sm">
-                                        <span className="material-icons">
-                                            delete
-                                        </span>
-                                    </a>
+                                    <button name="deleteItem" className="btn btn-sm" onClick={handleDeleteProduct.bind(this, product._id, product.images)} disabled={isDeleting}>
+                                        {isDeleting ?
+                                            <div className="spinner-container">
+                                                <div className="spinner-border text-light" role="status">
+                                                    <span className="sr-only"></span>
+                                                </div>
+                                            </div> 
+                                        : <span className="material-icons">delete</span>
+                                        }
+                                    </button>
                                 </td>
                             </tr>
                         )}
@@ -113,12 +139,12 @@ export default function AdminDashboard() {
 
                 <div className="text-center" style={{ border: '1px solid #c8c8c8', padding: '15px', backgroundColor: '#e0e0e0', borderRadius: '10px' }}>
                     <h4>Add Product</h4>
-                    <input value={product.name} onChange={handleInputChange} type="text" name="name" placeholder="Product Name" className="form-control shadow-none my-2" required/>
-                    <input value={product.category} onChange={handleInputChange} type="text" name="category" placeholder="category" className="form-control shadow-none my-2" required/>
-                    <input value={product.subcategory} onChange={handleInputChange} type="text" name="subcategory" placeholder="subCategory" className="form-control shadow-none my-2" required/>
-                    <input value={product.selling_price} onChange={handleInputChange} type="number" name="selling_price" placeholder="Selling price" className="form-control shadow-none my-2" required/>
-                    <input value={product.actual_price} onChange={handleInputChange} type="number" name="actual_price" placeholder="Actual price" className="form-control shadow-none my-2" required/>
-                    <input value={product.discount} onChange={handleInputChange} type="number" name="discount" placeholder="discount" className="form-control shadow-none my-2" required/>
+                    <input value={product.name} onChange={handleInputChange} type="text" name="name" placeholder="Product Name" className="form-control shadow-none my-2" required />
+                    <input value={product.category} onChange={handleInputChange} type="text" name="category" placeholder="category" className="form-control shadow-none my-2" required />
+                    <input value={product.subcategory} onChange={handleInputChange} type="text" name="subcategory" placeholder="subCategory" className="form-control shadow-none my-2" required />
+                    <input value={product.selling_price} onChange={handleInputChange} type="number" name="selling_price" placeholder="Selling price" className="form-control shadow-none my-2" required />
+                    <input value={product.actual_price} onChange={handleInputChange} type="number" name="actual_price" placeholder="Actual price" className="form-control shadow-none my-2" required />
+                    <input value={product.discount} disabled type="number" name="discount" placeholder="discount" className="form-control shadow-none my-2" required />
                     <input type="file" onChange={handleInputChange} accept="image/*" name="images[]" className="product-images form-control shadow-none my-2" placeholder="image" multiple />
                     <div className="preview_img d-flex flex-wrap justify-content-center" style={{ padding: '10px 0', width: '230px' }}>
                         {product.images.map((image) => (
@@ -133,7 +159,7 @@ export default function AdminDashboard() {
                                 <div className="spinner-border text-light" role="status">
                                     <span className="sr-only"></span>
                                 </div>
-                            </div> : 
+                            </div> :
                             "Submit"
                         }
                     </button>

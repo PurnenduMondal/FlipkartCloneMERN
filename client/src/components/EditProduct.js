@@ -9,6 +9,7 @@ function EditProduct() {
   const params = useParams()
   const initialProductStates = { _id: "", name: "", category: "", subcategory: "", selling_price: "", actual_price: "", discount: "", images: [{ url: "" }], slug: "" }
   const [product, setProduct] = useState(initialProductStates)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
 
@@ -16,20 +17,21 @@ function EditProduct() {
   }, [])
 
   useEffect(() => {
-    let discount = parseInt((product.actual_price - product.selling_price)*(100/product.actual_price))
-    setProduct({ ...product, discount:discount })
+    let discount = parseInt((product.actual_price - product.selling_price) * (100 / product.actual_price))
+    setProduct({ ...product, discount: discount })
   }, [product.selling_price, product.actual_price])
 
   const handleInputChange = (e) => {
-    
-    let discount = Math.round((product.actual_price - product.selling_price)*(100/product.actual_price))
-    setProduct({ ...product, [e.target.name]: e.target.value })    
-
+    setProduct({ ...product, [e.target.name]: e.target.value })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    updateProduct(product).then((res) => setProduct(res.data))
+    setIsLoading(true)
+    updateProduct(product).then((res) => {
+      setIsLoading(false)
+      setProduct(res.data)
+    })
   }
 
   return (
@@ -68,7 +70,7 @@ function EditProduct() {
             </div>
             <div style={{ marginTop: '10px' }}>
               <label htmlFor="discount">Discount</label>
-              <input type="number" name="discount" placeholder="discount" value={product.discount} className="form-control shadow-none" />
+              <input type="number" name="discount" placeholder="discount" value={product.discount} disabled className="form-control shadow-none" />
             </div>
           </div>
           <div style={{ marginTop: '20px', width: '100%' }}>
@@ -84,7 +86,16 @@ function EditProduct() {
             Add Images: <input type="file" style={{ marginTop: "10px" }} />
           </div>
 
-          <button type="submit" name="createNewCourseBtn" className="addbtn btn btn-primary my-3">Update Product</button>
+          <button type="submit" name="createNewCourseBtn" className="addbtn btn btn-primary my-3" disabled={isLoading}>
+            {isLoading ?
+              <div className="spinner-container">
+                <div className="spinner-border text-light" role="status">
+                  <span className="sr-only"></span>
+                </div>
+              </div> :
+              "Update Product"
+            }
+          </button>
         </form>
       </div>
     </div>

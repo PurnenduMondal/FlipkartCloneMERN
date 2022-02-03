@@ -12,3 +12,9 @@ export const getAllProducts = async (slug) =>
 
 export const updateProduct = async (product) =>
   await axios.post(`${process.env.REACT_APP_API}/updateProduct`, product);
+
+export const deleteProductImage = async (public_id) =>
+  await axios.post(`${process.env.REACT_APP_API}/removeimage`, public_id);
+
+export const deleteProduct = async (productId) =>
+  await axios.post(`${process.env.REACT_APP_API}/deleteProduct`, productId);

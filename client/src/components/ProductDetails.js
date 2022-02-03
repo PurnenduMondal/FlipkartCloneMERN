@@ -21,6 +21,7 @@ function ProductDetails() {
 
 
 
+
   const handleAddToCart = () => {
 
     let cartItems = JSON.parse(cart)
