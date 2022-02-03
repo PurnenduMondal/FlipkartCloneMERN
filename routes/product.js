@@ -8,5 +8,4 @@ router.post("/product", authCheck, adminCheck, insert);
 router.post("/products", listAll);
 router.post("/updateProduct", updateProduct);
 router.post("/deleteProduct", deleteProduct);
-router.get("/p", listAll);
 module.exports = router;

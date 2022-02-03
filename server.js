@@ -15,12 +15,7 @@ dotenv.config()
 
 //middleware
 app.use(express.json({ limit: '10MB' }));
-const corsOptions ={
-  origin:'https://flipkart-mern-clone.vercel.app/', 
-  credentials:true,            //access-control-allow-credentials:true
-  optionSuccessStatus:200
-}
-app.use(cors(corsOptions))
+app.use(cors())
 
 //DB config
 mongoose
