@@ -8,6 +8,9 @@ const { readdirSync } = require('fs')
 const app = express()
 const port = process.env.PORT || 8000
 dotenv.config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({path: __dirname+'/.env'});
+}
 
 //middleware
 app.use(express.json({ limit: '10MB' }));
