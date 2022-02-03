@@ -20,7 +20,6 @@ mongoose
   .catch((err) => console.log("DB CONNECTION ERR", err));
 
 // routes middleware
-app.get('/', (req, res) => {res.status(200).send("Server is Running")})
 readdirSync("./routes").map(r => app.use("/api", require("./routes/" + r)));
 
 if ( process.env.NODE_ENV == "production"){
