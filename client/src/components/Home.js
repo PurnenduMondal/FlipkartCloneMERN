@@ -113,13 +113,15 @@ function Home() {
                     <h4>Deals of the Day</h4>
                     <div className="productSlider">
                         {isLoading ?
-                            <div>
+                            <div style={{ display: 'flex', flexDirection: 'column',justifyContent: 'center', alignItems: 'center'}}>
                             <div className="spinner-container">
                                 <div className="spinner-border text-info" role="status">
                                     <span className="sr-only"></span>
                                 </div>
                             </div>
-                            Please wait
+                            <div style={{textAlign: 'center'}}>
+                                Please wait
+                            </div>
                             </div> :
                             products.map((product, i) => (<Product product={product} key={i} />))
                         }
