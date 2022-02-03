@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 dotenv.config()
 
-middleware
+//middleware
 app.use(express.json({ limit: '10MB' }));
 app.use(cors())
 
