@@ -131,19 +131,19 @@ a:hover {
 .product__textContainer > h6 {
   padding-top: 10px;
 }
-.product__sellingPrice {
+.productDetails__sellingPrice {
   font-size: 28px;
   font-weight: 500;
 }
 
-.product__actualPrice {
+.productDetails__actualPrice {
   text-decoration:line-through;
   font-size: 16px;
   margin-left: 12px;
   color: #878787;
 }
 
-.product__discount {
+.productDetails__discount {
   margin-left: 12px;
   font-size: 16px;
   font-weight: 500;

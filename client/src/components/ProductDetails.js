@@ -82,9 +82,9 @@ function ProductDetails() {
         <div className="product__textContainer">
           <p> Home <span className="material-icons">chevron_right</span> Mobiles </p>
           <h1>{product.name}</h1>
-          <span className="product__sellingPrice">&#8377;{product.selling_price}</span>
-          <span className="product__actualPrice">&#8377;{product.actual_price}</span>
-          <span className="product__discount">{product.discount}% off</span>
+          <span className="productDetails__sellingPrice">&#8377;{product.selling_price}</span>
+          <span className="pproductDetails__actualPrice">&#8377;{product.actual_price}</span>
+          <span className="productDetails__discount">{product.discount}% off</span>
 
           <h6>Available offers</h6>
           <div className="product__offer">

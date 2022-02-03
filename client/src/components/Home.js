@@ -115,7 +115,7 @@ function Home() {
                         {isLoading ?
                             <div>
                             <div className="spinner-container">
-                                <div className="spinner-border text-light" role="status">
+                                <div className="spinner-border text-info" role="status">
                                     <span className="sr-only"></span>
                                 </div>
                             </div>
