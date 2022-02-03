@@ -8,9 +8,14 @@ function Home() {
 
     const [products, setProducts] = useState([])
     const [sliderImageIndex, setSliderImageIndex] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        getAllProducts({}).then(res => setProducts(res.data))
+        setIsLoading(true)
+        getAllProducts({}).then(res => {
+            setProducts(res.data)
+            setIsLoading(false)
+        })
     }, [])
 
     let sliderImages = [
@@ -107,8 +112,16 @@ function Home() {
                 <div className="subcategory">
                     <h4>Deals of the Day</h4>
                     <div className="productSlider">
-                        {
-                            products.map((product, i) => (<Product product={product} key={i}/>))
+                        {isLoading ?
+                            <div>
+                            <div className="spinner-container">
+                                <div className="spinner-border text-light" role="status">
+                                    <span className="sr-only"></span>
+                                </div>
+                            </div>
+                            Please wait
+                            </div> :
+                            products.map((product, i) => (<Product product={product} key={i} />))
                         }
                     </div>
                     <a className="subcategory__prevButton" >
